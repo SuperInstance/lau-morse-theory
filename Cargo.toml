@@ -1,0 +1,15 @@
+[package]
+name = "lau-morse-theory"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/SuperInstance/lau-morse-theory"
+description = "Morse theory for agent state spaces — critical points, gradient flows, and handlebody decomposition"
+
+[dependencies]
+nalgebra = { version = "0.33", features = ["serde-serialize"] }
+serde = { version = "1", features = ["derive"] }
+num-traits = "0.2"
+
+[dev-dependencies]
+approx = "0.5"
