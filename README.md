@@ -1,39 +1,62 @@
 # lau-morse-theory
 
-Morse theory for agent state spaces — critical points, gradient flows, and handlebody decomposition.
+Critical points, gradient flows, and handlebody decomposition for manifolds — including agent state spaces.
 
-## Features
+A Morse function tells you the shape of a space by counting where it's flat. Every peak, valley, and saddle point is a critical point, and the *index* of each one tells you what dimension of "handle" to glue on. Morse theory is how you reconstruct a whole manifold from a single well-chosen function.
 
-- **Morse functions on manifolds**: Define Morse functions with critical points, compute gradients and Hessians
-- **Morse lemma**: Coordinate transformation near non-degenerate critical points
-- **Morse inequalities**: Weak and strong Morse inequalities with verification
-- **Handlebody decomposition**: Decompose manifolds via handles attached at critical points
-- **Gradient flow lines**: Numerical integration of negative gradient flows
-- **Stable/unstable manifolds**: Ascending and descending manifolds of critical points
-- **Morse-Smale complexes**: Cell decomposition from transverse gradient flows
-- **Persistence**: Persistence diagrams and Reeb graphs from Morse functions
-- **Agent state spaces**: Model agent states as manifold points with gradient flow transitions
+Like a hermit crab surveying the ocean floor — every bump and depression tells it something about the terrain ahead.
 
-## Usage
+## The math in 60 seconds
+
+A **Morse function** f: M → ℝ is a smooth function whose critical points are all non-degenerate (the Hessian is full-rank). At each critical point p, the **index** λ(p) is the number of negative eigenvalues of the Hessian. Morse theory tells us:
+
+- **Weak Morse inequalities:** cₖ ≥ bₖ (number of index-k critical points ≥ k-th Betti number)
+- **Strong Morse inequalities:** c₀ - c₁ + c₂ - ... gives the Euler characteristic
+- **Handle decomposition:** M is built by attaching one handle of dimension λ(p) per critical point
+- **Morse-Smale complex:** gradient flow lines connecting critical points of adjacent index
+
+References: Milnor, *Morse Theory* (1963); Matsumoto, *An Introduction to Morse Theory* (2002)
+
+## Quick start
 
 ```rust
-use lau_morse_theory::{MorseFunction, MorseInequalityResult, HandlebodyDecomposition};
+use lau_morse_theory::{Manifold, MorseFunction, MorseInequalities};
 
-// Use a predefined Morse function on the torus
-let f = MorseFunction::height_torus();
-assert_eq!(f.total_critical_points(), 4); // min, 2 saddles, max
+// Create a 2-sphere S²
+let sphere = Manifold::sphere(2);
 
-// Verify Morse inequalities
-let betti = BettiNumbers::new(vec![1, 2, 1]);
-let result = verify_morse_inequalities(&f, &betti);
-assert!(result.weak_satisfied);
-assert!(result.strong_satisfied);
+// Define a height function (standard Morse function on S²)
+let morse = MorseFunction::height_function(&sphere);
 
-// Build handlebody decomposition
-let hb = HandlebodyDecomposition::from_morse_function(&f);
-assert_eq!(hb.euler_characteristic(), 0); // χ(T²) = 0
+// Find critical points
+let critical = morse.critical_points();
+// S² with height function has: 1 minimum (index 0), 1 maximum (index 2)
+
+// Verify Morse inequalities against Betti numbers
+let betti = sphere.betti_numbers(); // [1, 0, 1]
+let verified = MorseInequalities::verify(&critical, &betti);
+assert!(verified.weak);   // cₖ ≥ bₖ for all k
+assert!(verified.strong); // alternating sums match
 ```
 
-## License
+## Key types
 
-MIT
+| Type | What it is |
+|------|-----------|
+| `Manifold` | A differentiable manifold (sphere, torus, CPⁿ, or custom) |
+| `MorseFunction` | A smooth function with non-degenerate critical points |
+| `CriticalPoint` | A point where ∇f = 0, with index, position, and Hessian |
+| `HandleBody` | Decomposition of M into handles attached at critical points |
+| `GradientFlow` | Flow lines of ∇f connecting critical points |
+| `MorseSmaleComplex` | Cells formed by stable/unstable manifold intersections |
+| `PersistenceDiagram` | Birth-death pairs from sublevel set filtration |
+| `AgentStateSpace` | Agent states as a manifold with energy landscape as Morse function |
+
+## Contributing
+
+Found a bug? Have a cool application of Morse theory to agent systems? [Open an issue](https://github.com/SuperInstance/lau-morse-theory/issues) or send a PR. We're especially interested in:
+
+- Numerical stability improvements for Hessian computation
+- New manifold types (projective spaces, Grassmannians)
+- Visualization tools for gradient flows
+- Applications to optimization landscapes in ML
