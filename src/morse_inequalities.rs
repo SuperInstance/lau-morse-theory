@@ -4,6 +4,7 @@
 //! Strong Morse inequality: μ_k - μ_{k-1} + ... ± μ_0 ≥ β_k - β_{k-1} + ... ± β_0
 //! Equality for k ≥ n: χ(M) = Σ(-1)^k μ_k = Σ(-1)^k β_k
 
+#[allow(unused_imports)]
 use nalgebra::DVector;
 use serde::{Serialize, Deserialize};
 use crate::morse_function::MorseFunction;

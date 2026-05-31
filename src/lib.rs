@@ -1,3 +1,5 @@
+#![deny(unsafe_code)]
+#![allow(clippy::type_complexity, clippy::needless_range_loop)]
 //! # lau-morse-theory
 //!
 //! Morse theory for agent state spaces — critical points, gradient flows,

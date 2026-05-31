@@ -43,12 +43,12 @@ impl FlowLine {
 
     /// Start point of the flow.
     pub fn start(&self) -> &DVector<f64> {
-        &self.trajectory.first().unwrap_or(&self.source.position)
+        self.trajectory.first().unwrap_or(&self.source.position)
     }
 
     /// End point of the flow.
     pub fn end(&self) -> &DVector<f64> {
-        &self.trajectory.last().unwrap_or(&self.target.position)
+        self.trajectory.last().unwrap_or(&self.target.position)
     }
 
     /// Interpolate the flow line at parameter t ∈ [0, 1].

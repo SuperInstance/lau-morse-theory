@@ -2,6 +2,7 @@
 //!
 //! Each critical point of index k corresponds to attaching a k-handle.
 
+#[allow(unused_imports)]
 use nalgebra::DVector;
 use serde::{Serialize, Deserialize};
 use crate::critical_point::CriticalPoint;
